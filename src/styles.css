@@ -37,7 +37,7 @@
 .skip-link{min-height:44px;padding:8px 12px}
 .day-chip,.date-card,.invite-choice,.choice,.share-option,.skip-link{font-size:11px}
 .radio-dot{display:block;width:9px;height:9px;border:1px solid #cdb8ad;border-radius:50%}
-.coffee-mark{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.plan-mark{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
 .hug-scene.hugged{height:145px;margin-bottom:12px}
 .hug-scene.hugged .hug-message{top:98px}
 .envelope.open{height:auto;min-height:205px;padding-bottom:78px;display:flex;flex-direction:column;align-items:center}

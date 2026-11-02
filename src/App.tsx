@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowLeft, ArrowRight, Check, Copy, Heart, Leaf, LockKeyhole, MailOpen, Sparkles, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, CircleDot, Coffee, Copy, Flower2, Gift, Heart, Leaf, LockKeyhole, MailOpen, MoonStar, Sparkles, Utensils, X } from 'lucide-react'
 import { compliments, dateIdeas, letter, questions } from './data/content'
 import { Lily } from './components/Lily'
 import { BotanicalMark, FinalBouquet, HugGarden, InvitationSprig } from './components/BotanicalScenes'
@@ -18,9 +18,10 @@ const initialAnswers = (): Answers => {
   try { return JSON.parse(sessionStorage.getItem('jardin-monita') || '{}') as Answers } catch { return {} }
 }
 
-function PlanMark({ title, mark }: { title: string; mark: string }) {
-  if (title !== 'Cafecito y postre') return <span>{mark}</span>
-  return <svg className="coffee-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h11v7a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9Zm11 2h2a2 2 0 0 1 0 4h-2M8 6c-1-1 .5-2 0-3m4 3c-1-1 .5-2 0-3"/></svg>
+const planIcons = { sushi: CircleDot, italian: Utensils, coffee: Coffee, fun: Sparkles, surprise: Gift, quiet: MoonStar }
+function PlanMark({ mark }: { mark: keyof typeof planIcons }) {
+  const Icon = planIcons[mark]
+  return <Icon className="plan-mark" size={20} strokeWidth={1.4} aria-hidden="true" />
 }
 
 function ResponseSelect({ label, value, options, disabled, onChange }: { label: string; value: string; options: readonly string[]; disabled: boolean; onChange: (value: string) => void }) {
@@ -179,7 +180,7 @@ export default function App() {
           {chapter === 0 && <>
             <Lily stage={opened ? 'open' : 'closed'} className={`hero-lily ${opened ? 'flowering' : 'breathing'}`} decorative/>
             <span className="art-caption">LILIUM · UNA FLOR PARA TI AMOR DE MI VIDA</span>
-            <span className="floating-leaf leaf-a">❧</span><span className="floating-leaf leaf-b">✧</span>
+            <Leaf className="floating-leaf leaf-a" size={25} strokeWidth={1.25} aria-hidden="true"/><Sparkles className="floating-leaf leaf-b" size={16} strokeWidth={1.3} aria-hidden="true"/>
           </>}
           {chapter === 2 && <HugGarden hugged={comfort}/>}
           {chapter === 4 && <InvitationSprig/>}
@@ -187,7 +188,7 @@ export default function App() {
         <div className="content-column">
           <AnimatePresence mode="wait" initial={false}>
             <motion.article key={chapter} className="chapter-content" initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }} transition={transition}>
-              <div className="chapter-kicker"><span className="kicker-mark">✳</span>{chapters[chapter]}</div>
+              <div className="chapter-kicker"><Sparkles className="kicker-mark" size={14} strokeWidth={1.4} aria-hidden="true"/>{chapters[chapter]}</div>
               {chapter === 0 && <>
                 {!opened ? <div className="welcome-copy"><p className="eyebrow">una cosita hecha especialmente para ti</p><h1>Tengo algo<br/><em>pequeñito</em> para ti<span className="period">.</span></h1><p className="intro-text">Un pequeño rincón para hacer una pausa,<br className="desktop-break"/> respirar y encontrarte con algo bonito.</p><button className="button button-primary" onClick={() => setOpened(true)}>Descubrir la sorpresa <ArrowRight size={16}/></button><p className="micro-note"><Sparkles size={12}/> toma el tiempo que quieras y necesites</p></div> : <div className="welcome-copy revealed"><p className="eyebrow">floreció algo bonito</p><h1>Un detalle<br/><em>para Monita191102</em><span className="period">.</span></h1><blockquote>Hay personas que, incluso en los días más grises, merecen encontrarse con algo bonito y especial.<br/><br/>Y tú, monita, eres una de ellas.</blockquote><button className="button button-primary" onClick={next}>Continuar <ArrowRight size={16}/></button></div>}
               </>}
@@ -198,7 +199,7 @@ export default function App() {
               </>}
               {chapter === 2 && <>
                 <p className="eyebrow">sin tener que encontrar las palabras perfectas</p><h1>También mereces cariño<br/><em>en tus días grises amor de mi vida.</em></h1>
-                <div className="gentle-note"><span className="note-flower">✿</span><p>Sé que últimamente han sido días difíciles y que hay cosas que duelen mucho más de lo que las palabras pueden explicar.</p><p>No quiero decirte cómo sentirte ni pretender que todo se arregla con una sonrisa.</p><p>Solo quería recordarte que no tienes que estar bien todo el tiempo.</p><p>Eres alguien muy especial para mí, y si algún día necesitas platicar, distraerte o simplemente sentirte acompañada, quiero que sepas que puedes contar conmigo para todo.</p></div>
+                <div className="gentle-note"><Flower2 className="note-flower" size={17} strokeWidth={1.4} aria-hidden="true"/><p>Sé que últimamente han sido días difíciles y que hay cosas que duelen mucho más de lo que las palabras pueden explicar.</p><p>No quiero decirte cómo sentirte ni pretender que todo se arregla con una sonrisa.</p><p>Solo quería recordarte que no tienes que estar bien todo el tiempo.</p><p>Eres alguien muy especial para mí, y si algún día necesitas platicar, distraerte o simplemente sentirte acompañada, quiero que sepas que puedes contar conmigo para todo.</p></div>
                 <button className="button button-soft" onClick={() => setComfort(value => !value)}>{comfort ? 'Guardar este abracito' : 'Necesito un abracito'} <Heart size={15}/></button>
                 <p className={`hug-message-inline ${comfort ? 'visible' : ''}`} aria-live="polite">{comfort ? 'Te mando uno de esos abrazos largos que no necesitan palabras y que te hace sentir segura.' : ''}</p>
                 <div className="chapter-actions"><button className="button button-text" onClick={next}>Continuar <ArrowRight size={15}/></button></div>
@@ -211,7 +212,7 @@ export default function App() {
               </>}
               {chapter === 4 && <>
                 <p className="eyebrow">sin expectativas, solo si te nace</p><h1>¿Y si nos regalamos<br/><em>otro recuerdo bonito más a nuestra bella vida?</em></h1><div className="gentle-note date-intro"><p>Me encantó poder verte y platicar contigo estos días.</p><p>Y aunque me gusta mucho compartir tiempo contigo, también quiero respetar tus tiempos y cómo te sientes.</p><p>Si te nace y te sientes comoda, me encantaría que planeáramos otra salida juntos.</p></div>
-                <h2 className="small-question">¿Qué se te antoja?</h2><div className="date-grid">{dateIdeas.map(item => <button className={`date-card ${datePick === item.title ? 'selected' : ''}`} key={item.title} onClick={() => setDatePick(item.title)}><PlanMark {...item}/>{item.title}</button>)}</div>
+                <h2 className="small-question">¿Qué se te antoja?</h2><div className="date-grid">{dateIdeas.map(item => <button className={`date-card ${datePick === item.title ? 'selected' : ''}`} key={item.title} onClick={() => setDatePick(item.title)}><PlanMark mark={item.mark}/>{item.title}</button>)}</div>
                 <h2 className="small-question">¿Qué día se te acomodaría mejor?</h2><div className="day-row">{invitationDays.map(item => <button className={`day-chip ${day === item ? 'selected' : ''}`} key={item} onClick={() => setDay(item)}>{item}</button>)}</div>
                 <h2 className="small-question">¿Te gustaría que nos viéramos?</h2><div className="invite-list">{invitationOptions.map(item => <button className={`invite-choice ${invitation === item ? 'selected' : ''}`} key={item} onClick={() => setInvitation(item)}>{item}<span>{invitation === item ? <Check size={14}/> : <i className="radio-dot"/>}</span></button>)}</div>
                 {invitation && <p className="kind-response" role="status">{invitation === 'Sí, me encantaría' ? 'Me haría muy feliz. Ya encontraremos un día bonito.' : invitation === 'Podría ser, vamos viendo' ? 'Claro, sin prisa. Podemos ir viendo cómo te sientes.' : invitation === 'Prefiero que sigamos platicando pipipipi' ? 'Me encanta saber de ti. Sigamos con baby steps.' : 'Lo entiendo y respeto tu espacio. Aquí estoy con todo el amor para ti.'}</p>}
@@ -244,7 +245,7 @@ export default function App() {
         </div>
       </div>
 
-      <footer className="site-footer"><span>CON CARIÑO, PARA MI MONITA</span><span className="footer-sprig">— &nbsp;un pequeño detalle de amor para una gran mujer&nbsp; —</span><span>HECHO CON AMOR <span className="footer-flower">✿</span></span></footer>
+      <footer className="site-footer"><span>CON CARIÑO, PARA MI MONITA</span><span className="footer-sprig">— &nbsp;un pequeño detalle de amor para una gran mujer&nbsp; —</span><span>HECHO CON AMOR <Flower2 className="footer-flower" size={12} strokeWidth={1.4} aria-hidden="true"/></span></footer>
       {shareOpen && <div className="dialog-backdrop" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) setShareOpen(false) }}><section className="share-dialog" role="dialog" aria-modal="true" aria-labelledby="share-title"><button className="dialog-close" aria-label="Cerrar" onClick={() => setShareOpen(false)}><X size={18}/></button><p className="eyebrow">tú decides qué compartir</p><h2 id="share-title">Solo lo que te nazca.</h2><p className="body-copy">Espero te puedas abrir conmigo hoy en que no fue un día facil para ti.</p><div className="share-options">{[['unwind','Qué te antoja para desconectarte'],['wish','Algo que te ilusiona'],['plan','El tipo de plan contigo'],['date','El plan que elegiste'],['day','El día que te viene bien'],['invite','Tu respuesta sobre vernos']].map(([key,label]) => <label key={key} className="share-option"><input type="checkbox" checked={share.includes(key)} onChange={() => toggleShare(key)}/><span>{label}</span></label>)}</div><label className="preview-label" htmlFor="share-preview">VISTA PREVIA · PUEDES EDITARLA</label><textarea id="share-preview" className="share-preview" value={editedSummary} onChange={event => setEditedSummary(event.target.value)}/><div className="share-actions"><button className="button button-soft" onClick={copySummary}><Copy size={14}/>{copyStatus === 'copied' ? 'Copiado' : copyStatus === 'failed' ? 'No se pudo copiar' : 'Copiar texto'}</button><a className="button button-primary" href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(editedSummary)}`} target="_blank" rel="noreferrer">Abrir Wasap <ArrowRight size={15}/></a></div><p className="privacy-note">WhatsApp se abrirá con el texto listo; no se envía hasta que tú lo confirmes allí.</p></section></div>}
     </main>
   )
